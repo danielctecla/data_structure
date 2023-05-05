@@ -1,7 +1,7 @@
 
 # Airport_program
 ✈︎
-Este programa consta de una lista doblemente enlazada la cual simula el sistema de un aeropuerto, el cual puedes agregar n aviones hasta donde te permita tu memoria. Para que se eliminen los aviones tiene que pasar la hora de despegue del avión para esto se tiene que introducir la hora actual cada cierto tiempo y se elimnan los aviones que ya esta en una hora pasada.
+Este programa consta de una lista doblemente enlazada que simula el sistema de un aeropuerto. Se pueden agregar n aviones hasta donde la memoria lo permita. Para eliminar los aviones, es necesario que pase la hora de despegue del avión. Para esto, es necesario introducir la hora actual cada cierto tiempo y se eliminan los aviones que ya han pasado su hora de despegue.
 
 ## Contacto
 
