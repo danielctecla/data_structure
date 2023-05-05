@@ -1,5 +1,5 @@
-# data_structure
-# Bienvenido a mi perfil de GitHub
+
+# Bienvenido a Data Structures y Projects
 
 ¡Hola! Soy Catonga Tecla Daniel Isaí, estudiante de la ESCOM, IPN. Actualmente estoy cursando 2do semestre de la carrera de Inteligencia Artificial.
 
