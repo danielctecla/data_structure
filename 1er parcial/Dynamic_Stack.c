@@ -1,10 +1,16 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<conio.h>
 
 struct pila{
     int num;
     struct pila *next;
 };
+
+struct pila *iniciar(struct pila *iniciar){
+    iniciar = NULL;
+    return iniciar;
+}
 
 struct pila *push(struct pila *stack_top,int num);
 struct pila *pop(struct pila *stack_top);
@@ -16,34 +22,42 @@ struct pila *delete(struct pila *stack);
 void IniciarPila();
 int main(){
     int n=0,data;
+    system("cls");
+    printf("Bienvenido a la Pila Dinamica");
     //Creamos nuestra pila y le asignamos Null ya que no la hemos inicializado.
-    struct pila *top=NULL;
-    while (n!=6){
-        printf("\n\n1.Agregar a la Pila.\n2.Pop\n3.Peak\n4.Pila Vacia\n5.Eliminar Pila\n6.Salir\nOpcion: ");
+    struct pila *top=iniciar(top);
+    while (n!=5){
+        printf("\n\nMenu\n1.Agregar a la Pila.\n2.Pop\n3.Peak\n4.Pila Vacia\n5.Eliminar Pila y Salir\n\nOpcion: ");
         scanf("%d",&n);
         
         switch (n){
+        
         case 1:
-            printf("Ingrese el numero que quiere agregar: ");
+            
+            printf("\n\tIngrese el numero que quiere agregar: ");
             scanf("%d",&data);
+            system("cls");
             top=push(top,data);
             break;
         case 2:
+            system("cls");
             top = pop(top);
             break;
         case 3:
+            system("cls");
             if (peak(top) != -1)
-                printf("El valor del tope es: %d\n", peak(top));
-            else
-                printf("La pila esta vacía\n");
+                printf("\nEl valor del tope es: %d\n", peak(top));
+
             break;
         case 4:
+            system("cls");
             if(empty_Stack(top)!=-1)
-                printf("La pila no esta vacia");
+                printf("\nFalse. La pila no esta vacia");
             else
-                printf("La pila esta vacia");
+                printf("\nTrue. La pila si esta vacia");
             break;
         case 5:
+            system("cls");
             top=delete(top);
             break;
         default:
@@ -54,7 +68,7 @@ int main(){
     }
 
     free(top);
-        
+    getch();    
 
 }
 
@@ -67,29 +81,33 @@ struct pila *push(struct pila *stack_top,int num){
     if(stack_top==NULL){
         nodo->next=NULL;
         stack_top = nodo;
+        printf("\n%d agregado correctamente",num);
         return stack_top;
     }
-
+    
     //al no ser el primer elemento, entonces anidamos el nuevo nodo
     //al nodo que esta en el tope
     // después stack_top se le asigna el nuevo nodo como top
     nodo->next=stack_top;
     stack_top=nodo;
+    printf("\n%d agregado correctamente",num);
     return stack_top;
 }
 
 struct pila *pop(struct pila *stack_top){
     
-    if(stack_top==NULL){
-        printf("\nStack underflow");
+    if(empty_Stack(stack_top)!=1){
+        printf("\nstack underflow");
         return NULL;
     }
 
     struct pila *borrar=NULL;
 
     borrar=stack_top;
+    printf("\nEl elemento eliminado es:%d\n",borrar->num);
     stack_top=stack_top->next;
     free(borrar);
+
     return stack_top;
 }
 
@@ -102,17 +120,23 @@ int empty_Stack(struct pila *stack){
 
 int peak(struct pila *_top){
     //Comprobamos si la pila esta vacía, de ser así retornamos -1.
-    if(_top==NULL)
+    if(empty_Stack(_top)!=1){
+        printf("\nPila vacia");
         return -1;
+    }
     
     return _top->num;
 }
 
 struct pila *delete(struct pila *stack){
+    system("cls");
     if(empty_Stack(stack)==-1){
-        printf("\n\nLa pila esta vacia. Inicia la Pila");
+        printf("\n\nHas salido de la pila y no quedaron elementos en ella. Presiona Enter.\n");
         return NULL;
+    }else{
+        printf("\n\nHas salido de la pila y eliminamos todos los elementos de la pila. Presiona Enter.\n");
     }
+
     struct pila *temp= NULL;
     while (stack->next!=NULL){
         temp=stack;
