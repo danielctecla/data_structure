@@ -1,8 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<conio.h>
 
 #define TAM 13
+
 /*Struct of our nodes*/
 struct node{
     int pkey;
@@ -26,10 +28,13 @@ void initialize_table(struct node **);
 void insert(struct node **,int , char *, char *, char *);
 void display_hashT(struct node **);
 void searchOn(struct node**,int );
+void freeNodes(struct node **);
 
 
 //<------------------------------------- main -------------------------------------------------->
 int main(){
+
+    int select,key_search;
     struct node **hash_table;
     if((hash_table = (struct node **)malloc(sizeof(struct node *)*TAM))==NULL){
         printf("Error allocating memory");
@@ -51,14 +56,45 @@ int main(){
     insert(hash_table,2023698949,"Uday","Victoria","Artificial Intelligence");//11
     insert(hash_table,2023274859,"Carlos","Hernandez","Data Science");//12
 
+    do{
+        system("cls");
+        printf("\n\tMenu");
+        printf("\n\t1. Search");
+        printf("\n\t2. Display\n\t3. Exit");
+        printf("\n\n\t\toption: ");
+        scanf("%d",&select);
+        
+        if(select == 1){
+
+            system("cls");
+            printf("Ingrese el numero de control: ");
+            scanf("%d",&key_search);
+            searchOn(hash_table,key_search);
+            printf("\n\nPress enter to continue...");
+            getch();
+
+        }else if(select == 2){
+
+            system("cls");
+            display_hashT(hash_table);
+            printf("\n\nPress enter to continue...");
+            getch();
+
+        }else if(select == 3){
+            break;
+        }else{
+            printf("\n\tThis option doesn't exist");
+            printf("\n\nPress enter to continue...");
+            getch();
+        }
+
+    }while(select != 3);
+    
+    
+    freeNodes(hash_table);
     display_hashT(hash_table);
-
-    searchOn(hash_table,2023786557);
-    searchOn(hash_table,2023780000);
-
-
     free(hash_table);
-    return 0;
+    getch();
 }
 
 //<--------------------------------------- code functions ----------------------------------------->
@@ -86,18 +122,28 @@ void insert(struct node **hash_t,int key, char *name, char *surname, char *caree
     }
     if((hash_node_value = (struct value *)malloc(sizeof(struct value)))==NULL){
         printf("Error allocating memory in value");
+        free(hash_node);
         return;
     }
     if((hash_node_value->name = (char *)malloc(sizeof(char)*50))==NULL){
         printf("Error allocating memory in node->name");
+        free(hash_node_value);
+        free(hash_node);
         return;
     }
     if((hash_node_value->surname = (char *)malloc(sizeof(char)*50))==NULL){
         printf("Error allocating memory in node->surname");
+        free(hash_node_value->name);
+        free(hash_node_value);
+        free(hash_node);
         return;
     }
     if((hash_node_value->career = (char *)malloc(sizeof(char)*50))==NULL){
         printf("Error allocating memory in node->career");
+        free(hash_node_value->surname);
+        free(hash_node_value->name);
+        free(hash_node_value);
+        free(hash_node);
         return;
     }
 
@@ -171,5 +217,35 @@ void searchOn(struct node**hashTable,int Skey){
     }
     
     printf("\n\n\tThe user is:\n\tid:%d\n\tname: %s\n\tsurname: %s\n\tcareer: %s",sNode->value->id,sNode->value->name,sNode->value->surname,sNode->value->career);
+    
+}
+
+void freeNodes(struct node **hash_table){
+    struct node *free_node,*temp_node;
+    struct value *free_value;
+
+    for(int i = 0; i < TAM; i++){
+        if(*(hash_table+i) != NULL){
+            free_node = *(hash_table+i);
+            while(free_node != NULL){
+                temp_node = free_node->next_node;
+
+                free_value = free_node->value;
+                
+                free(free_value->name);
+                free(free_value->surname);
+                free(free_value->career);
+                free(free_value);
+
+                printf("\nNode with %d is free now",free_node->pkey);
+
+                free(free_node);
+                free_node = temp_node;
+            }
+
+            *(hash_table+i) = NULL;
+
+        }
+    }
     
 }
