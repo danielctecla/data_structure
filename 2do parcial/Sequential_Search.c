@@ -3,7 +3,15 @@
 #include<string.h>
 #include<stdbool.h>
 #include <ctype.h>
-#include <conio.h>
+
+/*Funcion para borrar pantalla dependiendo del sistema*/
+void clear_screen() {
+    #ifdef _WIN32
+        system("cls");   // Para Windows
+    #else
+        system("clear"); // Para Linux y macOS
+    #endif
+}
 
 //<-------------------------------- STRUCT ------------------------------------------>
 typedef struct alumno{
@@ -31,7 +39,6 @@ void inicializar(struct lista_escuela *list){
 }
 /*Para el ejemplo práctico solo insertaremos de forma que se agregue al final
 si tener que insertar antes o después de un nodo
-
 ES POR CUESTIONES PRÁCTICAS INSERTAMOS SOLO EN EL FINAL
 */
 void insertar(struct lista_escuela *,char *nom,char *ap_p,char *ap_mat,int blt, float prm);
@@ -58,15 +65,18 @@ int main(){
     insertar(lista,"Pedro","Ugalde","xxxxxx",2023625230,8.7);
     insertar(lista,"Itziar","Segura","xxxxxx",2023827830,7.7);
     insertar(lista,"Alexis","Chavez","xxxxxx",2023827230,8.16);
+    insertar(lista,"Uday","Chavez","xxxxxx",2023826230,4.16);
 
     do{
-        system("cls");
+        clear_screen();
         printf("Vamos iniciar una busqueda secuencial.\n\n");
         printf("\nEscoge el metodo de busqueda por:\na)Boleta\nb)Apellido Paterno\n\nIngresa: ");
         scanf("%c",&type);
     }while(type!='a' && type!='b');
     
-    system("cls");
+    getchar();
+    
+    clear_screen();
 
     if(type == 'a'){
         
@@ -76,34 +86,37 @@ int main(){
     }else{
         
         printf("Busqueda por Apellido\n\nIngrese el apellido paterno: ");
-        scanf("%s",&apellido);
+        scanf("%s",apellido);
 
     }
+
+    getchar();
 
     if(busqueda(lista,type,boleta,apellido))
         printf("\n\nPulse Enter para mostrar a todos los alumnos y comprobar que existe el alumno.\n");  
     else
         printf("\n\nPulse Enter para mostrar a todos los alumnos y comprobar que no existe el alumno.\n");
     
-    getch();   
+    getchar();  
     
-    system("cls");
+    clear_screen();
     printf("Los alumnos son: \n\n");
 
     display(lista);
 
     printf("\n\nPulse Enter para Salir: ");
-    getch();
+    getchar();
 
     delete_list(lista);//Borramos los nodos de la lista
     free(lista);//Borramos la lista
-    system("cls");
+    clear_screen();
 }
 
 
 //<-------------------------------- CODE FUNCTIONS ------------------------------------------>
 bool busqueda(struct lista_escuela *list,char dtype, int n_control, char *ap_patbus){
-    system("cls");
+    int verify = 0;
+    clear_screen();
     if(list->init == NULL && list->end == NULL){
         printf("La lista esta vacia");
         return false;
@@ -125,18 +138,29 @@ bool busqueda(struct lista_escuela *list,char dtype, int n_control, char *ap_pat
             
     }else{
 
-        while(node != list->end && !equal_char(node->ap_pat,ap_patbus))
-            node = node->next_alumn;
+        while(node != list->end){
 
-        if(equal_char(node->ap_pat,ap_patbus)){//Checa si el apellido es el mismo ya que puede que haya llegado al final
-            printf("\nSe ah encontrado al alumno con el apellido %s: ",ap_patbus);
-            printf("\n\nBoleta: %d\nNombre: %s\nApellido Paterno: %s\nApellido Materno: %s\nPromedio: %.2f\n",node->boleta,node->nombre,node->ap_pat,node->ap_mat,node->prom);
-            return true;
-        }else
-            printf("\n\nNo se ah encontrado a ningun alumno con el apellido: %s",ap_patbus);
+            if(equal_char(node->ap_pat,ap_patbus)){
+                printf("\nSe ah encontrado al alumno con el apellido %s: ",ap_patbus);
+                printf("\n\nBoleta: %d\nNombre: %s\nApellido Paterno: %s\nApellido Materno: %s\nPromedio: %.2f\n",node->boleta,node->nombre,node->ap_pat,node->ap_mat,node->prom);
+                verify++;
+            }
+            node = node->next_alumn;
+        
+        }
+                
+    }
+    
+    if(equal_char(node->ap_pat,ap_patbus)){//Checa si el apellido es el mismo ya que puede que haya llegado al final
+        printf("\nSe ah encontrado al alumno con el apellido %s: ",ap_patbus);
+        printf("\n\nBoleta: %d\nNombre: %s\nApellido Paterno: %s\nApellido Materno: %s\nPromedio: %.2f\n",node->boleta,node->nombre,node->ap_pat,node->ap_mat,node->prom);
+        verify++;
     }
 
-    return false;
+    if(verify == 0)
+        return false;
+    else
+        return true;
 }
 
 bool equal_char(char *s1, char *s2){

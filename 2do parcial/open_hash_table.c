@@ -1,7 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<conio.h>
+
+/*Funcion para borrar pantalla dependiendo del sistema*/
+void clear_screen() {
+    #ifdef _WIN32
+        system("cls");   // Para Windows
+    #else
+        system("clear"); // Para Linux y macOS
+    #endif
+}
 
 #define TAM 13
 
@@ -57,35 +65,37 @@ int main(){
     insert(hash_table,2023274859,"Carlos","Hernandez","Data Science");//12
 
     do{
-        system("cls");
+        clear_screen();
         printf("\n\tMenu");
         printf("\n\t1. Search");
         printf("\n\t2. Display\n\t3. Exit");
         printf("\n\n\t\toption: ");
         scanf("%d",&select);
+        getchar();
         
         if(select == 1){
 
-            system("cls");
+            clear_screen();
             printf("Ingrese el numero de control: ");
             scanf("%d",&key_search);
+            getchar();
             searchOn(hash_table,key_search);
             printf("\n\nPress enter to continue...");
-            getch();
+            getchar();
 
         }else if(select == 2){
 
-            system("cls");
+            clear_screen();
             display_hashT(hash_table);
             printf("\n\nPress enter to continue...");
-            getch();
+            getchar();
 
         }else if(select == 3){
             break;
         }else{
             printf("\n\tThis option doesn't exist");
             printf("\n\nPress enter to continue...");
-            getch();
+            getchar();
         }
 
     }while(select != 3);
@@ -94,7 +104,7 @@ int main(){
     freeNodes(hash_table);
     display_hashT(hash_table);
     free(hash_table);
-    getch();
+    getchar();
 }
 
 //<--------------------------------------- code functions ----------------------------------------->
