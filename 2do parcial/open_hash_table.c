@@ -1,13 +1,13 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<stdbool.h>
 
-/*Funcion para borrar pantalla dependiendo del sistema*/
 void clear_screen() {
     #ifdef _WIN32
-        system("cls");   // Para Windows
+        system("cls");   //Windows
     #else
-        system("clear"); // Para Linux y macOS
+        system("clear"); //Linux and macOS
     #endif
 }
 
@@ -35,14 +35,16 @@ int hashKey(int key){
 void initialize_table(struct node **);
 void insert(struct node **,int , char *, char *, char *);
 void display_hashT(struct node **);
-void searchOn(struct node**,int );
+bool searchOn(struct node**,int ,int);
 void freeNodes(struct node **);
+bool delete(struct node**, int);
 
 
 //<------------------------------------- main -------------------------------------------------->
 int main(){
 
-    int select,key_search;
+    int select,id;//option and key
+    char name[25],surname[25],career[50];
     struct node **hash_table;
     if((hash_table = (struct node **)malloc(sizeof(struct node *)*TAM))==NULL){
         printf("Error allocating memory");
@@ -51,7 +53,7 @@ int main(){
 
     initialize_table(hash_table);
 
-    insert(hash_table,2021600260,"Daniel","Catonga","Artificial Intelligence");//1
+    insert(hash_table,2021600230,"Daniel","Catonga","Artificial Intelligence");//1
     insert(hash_table,2021687423,"Manuel","Olguin","Artificial Intelligence");//2
     insert(hash_table,2023636238,"Itziar","Segura","Artificial Intelligence");//3
     insert(hash_table,2023566645,"Antonio","Estrada","Artificial Intelligence");//4
@@ -68,7 +70,7 @@ int main(){
         clear_screen();
         printf("\n\tMenu");
         printf("\n\t1. Search");
-        printf("\n\t2. Display\n\t3. Exit");
+        printf("\n\t2. Insert\n\t3. Delete\n\t4. Exit");
         printf("\n\n\t\toption: ");
         scanf("%d",&select);
         getchar();
@@ -76,21 +78,53 @@ int main(){
         if(select == 1){
 
             clear_screen();
-            printf("Ingrese el numero de control: ");
-            scanf("%d",&key_search);
+            printf("Enter your control number: ");
+            scanf("%d",&id);
             getchar();
-            searchOn(hash_table,key_search);
+            searchOn(hash_table,id,0);
             printf("\n\nPress enter to continue...");
             getchar();
 
         }else if(select == 2){
 
             clear_screen();
+            do{
+                printf("\n\tControl number: ");
+                scanf("%d",&id);
+                getchar();
+            }while(searchOn(hash_table,id,1));
+            
+            printf("\tName: ");
+            fgets(name, sizeof(name), stdin);
+            strtok(name, "\n");
+            printf("\tSurname: ");
+            fgets(surname, sizeof(surname), stdin);
+            strtok(surname, "\n");
+            printf("\tCareer: ");
+            fgets(career, sizeof(career), stdin);
+            strtok(career, "\n");
+            insert(hash_table,id,name,surname,career);
             display_hashT(hash_table);
             printf("\n\nPress enter to continue...");
             getchar();
 
         }else if(select == 3){
+            clear_screen();
+            printf("Enter the control number to delete: ");
+            scanf("%d",&id);
+            getchar();
+            if(delete(hash_table,id)){
+                printf("The user has been deleted");
+                display_hashT(hash_table);
+            }else
+                printf("This user does not exist");
+            
+            
+            printf("\n\nPress enter to continue...");
+            getchar();
+
+
+        }else if(select == 4){
             break;
         }else{
             printf("\n\tThis option doesn't exist");
@@ -98,13 +132,16 @@ int main(){
             getchar();
         }
 
-    }while(select != 3);
+    }while(select != 4);
     
     
     freeNodes(hash_table);
-    display_hashT(hash_table);
+    //display_hashT(hash_table);
     free(hash_table);
+    clear_screen();
+    printf("Press enter to exit...");
     getchar();
+
 }
 
 //<--------------------------------------- code functions ----------------------------------------->
@@ -206,12 +243,15 @@ void display_hashT(struct node **hash_table){
 }
 
 /* SEARCH FUNCTION!!!!!!!!!!!! */
-void searchOn(struct node**hashTable,int Skey){
+bool searchOn(struct node**hashTable,int Skey,int type){
     int index_k = hashKey(Skey);
 
     if(*(hashTable+index_k) == NULL){
-        printf("The key value doesn't exist");
-        return;
+        if(type == 0){
+            printf("The key value doesn't exist");
+            return false;
+        }else
+            return false;
     }
 
     struct node *sNode = *(hashTable+index_k);
@@ -219,15 +259,67 @@ void searchOn(struct node**hashTable,int Skey){
         sNode = sNode->next_node;
     }
 
-    if(sNode->pkey == Skey)
-        printf("\n\nUser found it");
-    else{
-        printf("\n\nThis user doesn't exist");
-        return;
+    if(type == 0){
+
+        if(sNode->pkey == Skey)
+            printf("\n\nUser found it");
+        else{
+            printf("\n\nThis user doesn't exist");
+            return false;
+        }
+        printf("\n\n\tThe user is:\n\tid:%d\n\tname: %s\n\tsurname: %s\n\tcareer: %s",sNode->value->id,sNode->value->name,sNode->value->surname,sNode->value->career);
+    
+    }else{
+
+        if(sNode->pkey == Skey){
+            printf("This control number is already used.\n\n");
+            return true;
+        }else
+            return false;
+            
+    }
+}
+
+bool delete(struct node**hashTable, int control_num){
+    int index_k = hashKey(control_num);
+
+    if(*(hashTable+index_k) == NULL)
+        return false;
+
+    struct node *sNode = *(hashTable+index_k),*temp_sNode;
+    struct value *value_;
+
+    if(sNode->pkey == control_num){
+        *(hashTable+index_k) = sNode->next_node;
+        value_ = sNode->value;
+        free(value_->name);
+        free(value_->surname);
+        free(value_->career);
+
+        free(sNode);
+
+        return true;
     }
     
-    printf("\n\n\tThe user is:\n\tid:%d\n\tname: %s\n\tsurname: %s\n\tcareer: %s",sNode->value->id,sNode->value->name,sNode->value->surname,sNode->value->career);
-    
+
+    while(sNode->next_node != NULL && control_num != sNode->pkey){
+        temp_sNode = sNode;
+        sNode = sNode->next_node;
+    }
+
+    if(sNode->pkey == control_num){
+        temp_sNode->next_node = sNode->next_node;
+        
+        value_ = sNode->value;
+        free(value_->name);
+        free(value_->surname);
+        free(value_->career);
+
+        free(sNode);
+
+        return true;
+    }else
+        return false;
 }
 
 void freeNodes(struct node **hash_table){

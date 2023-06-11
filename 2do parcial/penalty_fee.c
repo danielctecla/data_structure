@@ -4,12 +4,11 @@
 #include<stdbool.h>
 #include<ctype.h>
 
-/*Funcion para borrar pantalla dependiendo del sistema*/
 void clear_screen() {
     #ifdef _WIN32
-        system("cls");   // Para Windows
+        system("cls");   //Windows
     #else
-        system("clear"); // Para Linux y macOS
+        system("clear"); //Linux y macOS
     #endif
 }
 

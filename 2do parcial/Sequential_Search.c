@@ -4,12 +4,11 @@
 #include<stdbool.h>
 #include <ctype.h>
 
-/*Funcion para borrar pantalla dependiendo del sistema*/
 void clear_screen() {
     #ifdef _WIN32
-        system("cls");   // Para Windows
+        system("cls");   //Windows
     #else
-        system("clear"); // Para Linux y macOS
+        system("clear"); //Linux y macOS
     #endif
 }
 
@@ -51,7 +50,7 @@ bool equal_char(char *string1, char *string2);
 //<-------------------------------- MAIN ------------------------------------------>
 int main(){
     int boleta;
-    char type,apellido[50];
+    char type='n',apellido[50];
     struct lista_escuela *lista;
 
     if((lista = (struct lista_escuela*)malloc(sizeof(struct lista_escuela)))== NULL){
@@ -67,45 +66,52 @@ int main(){
     insertar(lista,"Alexis","Chavez","xxxxxx",2023827230,8.16);
     insertar(lista,"Uday","Chavez","xxxxxx",2023826230,4.16);
 
-    do{
+    while(type != 'd'){
+        do{
+
+            clear_screen();
+            printf("Vamos iniciar una busqueda secuencial.\n\n");
+            printf("\nEscoge el metodo de busqueda por:\na) Boleta\nb) Apellido Paterno\nc) Display Alumnos\nd) Salir\n\nIngresa: ");
+            scanf("%c",&type);
+            getchar();
+        }while(type!='a' && type!='b' && type!='c' && type!='d' );
+        
+        
+        
         clear_screen();
-        printf("Vamos iniciar una busqueda secuencial.\n\n");
-        printf("\nEscoge el metodo de busqueda por:\na)Boleta\nb)Apellido Paterno\n\nIngresa: ");
-        scanf("%c",&type);
-    }while(type!='a' && type!='b');
-    
-    getchar();
-    
-    clear_screen();
 
-    if(type == 'a'){
-        
-        printf("Busqueda por Boleta\n\nIngrese la boleta para la busqueda: ");
-        scanf("%d",&boleta);
+        if(type == 'a'){
+            
+            printf("Busqueda por Boleta\n\nIngrese la boleta para la busqueda: ");
+            scanf("%d",&boleta);
+            getchar();
 
-    }else{
+        }else if(type == 'b'){
+            
+            printf("Busqueda por Apellido\n\nIngrese el apellido paterno: ");
+            scanf("%s",apellido);
+            getchar();
+
+        }else if(type == 'c'){
+
+            printf("Los alumnos son: \n\n");
+            display(lista);
+            getchar();
         
-        printf("Busqueda por Apellido\n\nIngrese el apellido paterno: ");
-        scanf("%s",apellido);
+        }
+
+        if(type == 'a' || type == 'b'){
+
+            busqueda(lista,type,boleta,apellido);
+            getchar();
+            
+        }
 
     }
 
-    getchar();
-
-    if(busqueda(lista,type,boleta,apellido))
-        printf("\n\nPulse Enter para mostrar a todos los alumnos y comprobar que existe el alumno.\n");  
-    else
-        printf("\n\nPulse Enter para mostrar a todos los alumnos y comprobar que no existe el alumno.\n");
-    
-    getchar();  
-    
     clear_screen();
-    printf("Los alumnos son: \n\n");
-
-    display(lista);
-
-    printf("\n\nPulse Enter para Salir: ");
-    getchar();
+    printf("Se ha salido de la busqueda Binaria\nPulse enter para salir: ");
+    getchar();  
 
     delete_list(lista);//Borramos los nodos de la lista
     free(lista);//Borramos la lista
@@ -130,10 +136,10 @@ bool busqueda(struct lista_escuela *list,char dtype, int n_control, char *ap_pat
         
         if(node->boleta == n_control){
             printf("\nSe ah encontrado al alumno con la boleta %d: ",n_control);
-            printf("\n\nBoleta: %d\nNombre: %s\nApellido Paterno: %s\nApellido Materno: %s\nPromedio: %.2f\n",node->boleta,node->nombre,node->ap_pat,node->ap_mat,node->prom);
+            printf("\n\nBoleta: %d\nNombre: %s\nApellido Paterno: %s\nApellido Materno: %s\nPromedio: %.2f\n\nPulse enter...",node->boleta,node->nombre,node->ap_pat,node->ap_mat,node->prom);
             return true;
         }else
-            printf("\n\nNo se ah encontrado a ningun alumno con el numero de control: %d",n_control);
+            printf("\n\nNo se ah encontrado a ningun alumno con el numero de control: %d \n\nPulse enter...",n_control);
         
             
     }else{
@@ -158,9 +164,9 @@ bool busqueda(struct lista_escuela *list,char dtype, int n_control, char *ap_pat
     }
 
     if(verify == 0)
-        return false;
+        printf("\n\nNo se ah encontrado a ningun alumno con el nombre: %s \n\nPulse enter...",ap_patbus);
     else
-        return true;
+        printf("\n\nPulse enter...");
 }
 
 bool equal_char(char *s1, char *s2){
