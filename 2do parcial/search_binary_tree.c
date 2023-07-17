@@ -202,7 +202,7 @@ void deleteElement(struct node** tree, int val) {
     struct node* cur = *tree;
     struct node* parent = NULL;
 
-    // Buscar el nodo a eliminar
+    // Search node
     while (cur != NULL && cur->data != val) {
         parent = cur;
         if (val < cur->data)
@@ -211,13 +211,13 @@ void deleteElement(struct node** tree, int val) {
             cur = cur->right;
     }
 
-    // Si no se encontró el nodo
+    // if the element isn't in the tree
     if (cur == NULL) {
         printf("\nThe value to be deleted is not present in the tree.");
         return;
     }
 
-    // Caso 1: Nodo hoja
+    // case 1 leaves nodes
     if (cur->left == NULL && cur->right == NULL) {
         if (parent == NULL)
             *tree = NULL;
@@ -227,7 +227,7 @@ void deleteElement(struct node** tree, int val) {
             parent->right = NULL;
         free(cur);
     }
-    // Caso 2: Nodo con un hijo
+    // case 2 node with a son
     else if (cur->left == NULL) {
         if (parent == NULL)
             *tree = cur->right;
@@ -246,7 +246,7 @@ void deleteElement(struct node** tree, int val) {
         free(cur);
     }
 
-    // Caso 3: Nodo con dos hijos
+    // case 3 node with 2 sons
     else {
         struct node* sc = cur->right;
         struct node* scParent = cur;

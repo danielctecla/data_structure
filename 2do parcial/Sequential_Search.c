@@ -37,7 +37,7 @@ void inicializar(struct lista_escuela *list){
     list->tot = 0;
 }
 /*Para el ejemplo práctico solo insertaremos de forma que se agregue al final
-si tener que insertar antes o después de un nodo
+sin tener que insertar antes o después de un nodo
 ES POR CUESTIONES PRÁCTICAS INSERTAMOS SOLO EN EL FINAL
 */
 void insertar(struct lista_escuela *,char *nom,char *ap_p,char *ap_mat,int blt, float prm);

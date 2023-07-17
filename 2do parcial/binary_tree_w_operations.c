@@ -56,16 +56,14 @@ void printfTree(struct node *tree){
 
 }
 
-void displayTree(struct node *root, int level) {
-    if (root != NULL) {
-        displayTree(root->right, level + 1); 
-
-        for (int i = 0; i < level; i++) {
-            printf("____");
+void displayTree(struct node *tree, int lvl) {
+    if (tree != NULL) {
+        displayTree(tree->right, lvl + 1); 
+        for (int i = 0; i < lvl; i++) {
+            printf("    ");
         }
-
-        printf("%d\n", root->data);
-        displayTree(root->left, level + 1);
+        printf("%d\n", tree->data);
+        displayTree(tree->left, lvl + 1);
     }
 }
 

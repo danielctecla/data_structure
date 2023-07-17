@@ -28,7 +28,7 @@ struct value{
 };
 
 int hashKey(int key){
-    //Change to your own distribuiton function key
+
     return key % TAM;
 }
 

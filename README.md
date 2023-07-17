@@ -1,12 +1,11 @@
 
 # Bienvenido a Data Structures y Projects
 
-¡Hola! Soy Catonga Tecla Daniel Isaí, estudiante de la ESCOM, IPN. Actualmente estoy cursando 2do semestre de la carrera de Inteligencia Artificial.
+¡Hola! Soy Catonga Tecla Daniel Isaí, estudiante de la ESCOM, IPN. Archivos del curso de Algoritmos y Estructura de Datos.
 
 ## Sobre mí
 
 - 👨🏻‍💻 Me apasiona la programación y el desarrollo de software
-- 🎮 Me gusta jugar videojuegos en mi tiempo libre
 - 📚 Siempre estoy buscando aprender cosas nuevas sobre tecnología y programación
 
 
@@ -16,7 +15,7 @@ Aquí hay una lista de algunas de las tecnologías con las que estoy más famili
 
 - **Lenguajes de programación:** C, C++, Python
 - **Bases de datos:** MySQL
-- **Herramientas de control de versiones:** Git, GitHub
+
 
 
 ## Contacto
